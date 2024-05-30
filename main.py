@@ -95,9 +95,6 @@ def login():
     titulo_senha = Label(root,font=('Arial',10),text='SENHA',background='white')
     posicionar_label(titulo_senha,0.5,0.5)
     
-    botão_entrar = Button(root,text='Entrar',background='#38A37F',font=('Arial',14),fg='white')
-    posicionar_label(botão_entrar,0.5,0.65)
-    
     botão_entrar = Button(root,text='Entrar',background='#38A37F',font=('Arial',14),fg='white',command=lambda: obter_dados_formulário(cpf_formulario,senha_formulario))
     posicionar_label(botão_entrar,0.5,0.65)
 
