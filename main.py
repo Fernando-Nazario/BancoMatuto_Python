@@ -32,6 +32,10 @@ timer5 = 13000
 #Lista com o nome de todas as imagens
 banco_de_imagens = ['logo_banco_matuto.png','logo_matuto.png','logo_nome_matuto.png']
 
+#Define informações dos usuarios 
+dados_usuário = {'1000':'123','2000':'321'}
+informações_usuário = {'1000':'Cleber Moreno','2000':'Josáfa da Silva Nunes'}
+
 #Dicionario com os imagens carregadas
 imagens_carregadas = {}
 
@@ -57,6 +61,12 @@ def posicionar_label(label,posx,posy):
 #Função para deletar as labels
 def deletar_label(label):
     label.destroy()
+
+#Função para definir a fonte e cor
+def mensagem_usuário_login(texto,cor):
+    mensagem_pro_usuário = Label(root,font=('Arial',10),text=texto,background='white',fg=cor)
+    posicionar_label(mensagem_pro_usuário,0.5,0.35)
+    return mensagem_pro_usuário
 
 #Função para inicialização - Fim
 def boot():
@@ -88,7 +98,29 @@ def login():
     botão_entrar = Button(root,text='Entrar',background='#38A37F',font=('Arial',14),fg='white')
     posicionar_label(botão_entrar,0.5,0.65)
     
-    
+    botão_entrar = Button(root,text='Entrar',background='#38A37F',font=('Arial',14),fg='white',command=lambda: obter_dados_formulário(cpf_formulario,senha_formulario))
+    posicionar_label(botão_entrar,0.5,0.65)
+
+#Função que obtem os dados do formulário
+def obter_dados_formulário(cpf,senha):
+    cpf_usuário = str(cpf.get())
+    senha_usuário = str(senha.get())
+    if cpf_usuário and senha_usuário != None:
+        if cpf_usuário in dados_usuário and dados_usuário[cpf_usuário] == senha_usuário:
+            cpf.delete(0,END)
+            senha.delete(0,END)
+            mensagem_usuário_login('Acesso liberado!','green')
+        else:
+            cpf.delete(0,END)
+            senha.delete(0,END)
+            mensagem_inválida = mensagem_usuário_login('Cpf ou senha inválidos','red')
+            root.after(2000,lambda: deletar_label(mensagem_inválida))
+    else:
+        mensagem_preencha_dados = mensagem_usuário_login('Preencha os campos com seus dados','red')
+        root.after(2000,lambda: deletar_label(mensagem_preencha_dados))
+        if senha != None:
+            senha.delete(0,END)    
+
 #Delay de 1 segundo para executar a função boot() - Inicio
 root.after(timer1,boot)
 
