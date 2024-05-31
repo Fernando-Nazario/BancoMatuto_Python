@@ -1,5 +1,6 @@
 from tkinter import *
 from PIL import Image,ImageTk
+from tkinter import messagebox
 import os
 
 #Definindo a janela
@@ -18,23 +19,26 @@ root.iconbitmap('img/icone_cacto.ico')
 #Definindo a cor inicial da página
 root.config(bg='black')
 
-#timer1=5000
+#timer1=4000
 #timer2=4000
-#timer3=6000
-#timer4=13000
+#timer3=5500
+#timer4=12000
+#timer5=13000
 
-timer1 = 4000
-timer2 = 4000
-timer3 = 5500
-timer4 = 12000
-timer5 = 13000
+#Timers para os fake loads
+timer1 = 0
+timer2 = 0
+timer3 = 0
+timer4 = 0
+timer5 = 0
 
 #Lista com o nome de todas as imagens
 banco_de_imagens = ['logo_banco_matuto.png','logo_matuto.png','logo_nome_matuto.png']
 
 #Define informações dos usuarios 
 dados_usuário = {'1000':'123','2000':'321'}
-informações_usuário = {'1000':'Cleber Moreno','2000':'Josáfa da Silva Nunes'}
+informações_usuário = {'1000':'Elias Anthony Bento Pereira','2000':'Carolina Hadassa Nogueira'}
+saldo_dos_usuários = {'1000':0,'2000':0}
 
 #Dicionario com os imagens carregadas
 imagens_carregadas = {}
@@ -62,13 +66,31 @@ def posicionar_label(label,posx,posy):
 def deletar_label(label):
     label.destroy()
 
-#Função para definir a fonte e cor
+#Função para mandar os avisos na tela de login
 def mensagem_usuário_login(texto,cor):
     mensagem_pro_usuário = Label(root,font=('Arial',10),text=texto,background='white',fg=cor)
     posicionar_label(mensagem_pro_usuário,0.5,0.35)
     return mensagem_pro_usuário
 
-#Função para inicialização - Fim
+#Função para retornar ao menu pelo página deposito
+def retornar_ao_menu_deposito(l1,l2,l3,l4):
+    deletar_label(l1)
+    deletar_label(l2)
+    deletar_label(l3)
+    deletar_label(l4)
+    menu()
+
+#Função para apagar todos os widgets do menu quando entrar em alguma das páginas
+def deletar_itens_menu(b1,b2,b3,b4,b5,b6):
+    deletar_label(b1)
+    deletar_label(b2)
+    deletar_label(b3)
+    deletar_label(b4)
+    deletar_label(b5)
+    deletar_label(b6)
+    
+
+#Função para inicialização
 def boot():
     root.config(bg='#1b1b1b')
     root.after(timer2,lambda: root.config(bg='white'))
@@ -78,10 +100,18 @@ def boot():
     root.after(timer4,lambda: deletar_label(label_logo_boot))
     root.after(timer5,login)
 
+#Página de login
 def login():
+    global login_logo
     login_logo = criar_label_imagem(1)
     login_logo
     posicionar_label(login_logo,0.5,0.2)
+    
+    global cpf_formulario
+    global titulo_cpf
+    global senha_formulario
+    global titulo_senha
+    global botão_entrar
     
     cpf_formulario = Entry(root,width=30,borderwidth=5)
     posicionar_label(cpf_formulario,0.5,0.45)
@@ -100,13 +130,22 @@ def login():
 
 #Função que obtem os dados do formulário
 def obter_dados_formulário(cpf,senha):
+    global cpf_usuário
     cpf_usuário = str(cpf.get())
     senha_usuário = str(senha.get())
     if cpf_usuário and senha_usuário != None:
         if cpf_usuário in dados_usuário and dados_usuário[cpf_usuário] == senha_usuário:
             cpf.delete(0,END)
             senha.delete(0,END)
-            mensagem_usuário_login('Acesso liberado!','green')
+            mensagem_liberado = mensagem_usuário_login('Acesso liberado!','green')
+            deletar_label(login_logo)
+            deletar_label(titulo_cpf)
+            deletar_label(cpf_formulario)
+            deletar_label(titulo_senha)
+            deletar_label(senha_formulario)
+            deletar_label(botão_entrar)
+            root.after(1500,lambda:deletar_label(mensagem_liberado))
+            root.after(2000,menu)
         else:
             cpf.delete(0,END)
             senha.delete(0,END)
@@ -117,6 +156,43 @@ def obter_dados_formulário(cpf,senha):
         root.after(2000,lambda: deletar_label(mensagem_preencha_dados))
         if senha != None:
             senha.delete(0,END)    
+            
+#Página do menu
+def menu():
+    capturar_nome_usuário = informações_usuário[cpf_usuário]
+    capturar_saldo_usuário = saldo_dos_usuários[cpf_usuário]
+    nome_usuário = Label(root,text=f'Bem vindo, {capturar_nome_usuário}',bg='white',font=('Arial',12))
+    posicionar_label(nome_usuário,0.5,0.1)
+    saldo_usuário = Label(root,text=f'Seu saldo é R$ {capturar_saldo_usuário}',bg='white',font=('Arial',12))
+    posicionar_label(saldo_usuário,0.5,0.13)
+    botão_deposito = Button(root,text='Depósito',width=20,height=3,bg='#38A37F',fg='white',font=('Arial',16),command=lambda:página_deposito(botão_deposito,botão_saque,botão_extrato,botão_encerrar,nome_usuário,saldo_usuário))
+    posicionar_label(botão_deposito,0.25,0.3)
+    botão_saque = Button(text='Saque',width=20,height=3,bg='#38A37F',fg='white',font=('Arial',16),command=lambda:página_saque(botão_deposito,botão_saque,botão_extrato,botão_encerrar,nome_usuário,saldo_usuário))
+    posicionar_label(botão_saque,0.75,0.3)
+    botão_extrato = Button(root,text='Extrato',width=20,height=3,bg='#38A37F',fg='white',font=('Arial',16),command=lambda:página_extrato(botão_deposito,botão_saque,botão_extrato,botão_encerrar,nome_usuário,saldo_usuário))
+    posicionar_label(botão_extrato,0.25,0.7)
+    botão_encerrar = Button(root,text='Encerrar operação',width=20,height=3,bg='red',fg='white',font=('Arial',16),command=lambda:encerrar_operação(botão_deposito,botão_saque,botão_extrato,botão_encerrar,nome_usuário,saldo_usuário))
+    posicionar_label(botão_encerrar,0.75,0.7)
+
+#Função para o botão deposito   
+def página_deposito(b1,b2,b3,b4,b5,b6):
+    deletar_itens_menu(b1,b2,b3,b4,b5,b6)
+
+#Função para o botão saque
+def página_saque(b1,b2,b3,b4,b5,b6):
+    deletar_itens_menu(b1,b2,b3,b4,b5,b6)
+
+#Função para o botão extrato
+def página_extrato(b1,b2,b3,b4,b5,b6):
+    deletar_itens_menu(b1,b2,b3,b4,b5,b6)
+    
+#Função para o botão encerrar operação
+def encerrar_operação(b1,b2,b3,b4,b5,b6):
+    deletar_itens_menu(b1,b2,b3,b4,b5,b6)
+    mensagem_encerramento = Label(text='Até mais :)',font=('Arial',24),fg='red',bg='white')
+    posicionar_label(mensagem_encerramento,0.5,0.45)
+    root.after(2000,lambda: root.quit())
+    
 
 #Delay de 1 segundo para executar a função boot() - Inicio
 root.after(timer1,boot)
