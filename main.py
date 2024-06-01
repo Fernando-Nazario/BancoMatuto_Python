@@ -25,11 +25,11 @@ root.config(bg='black')
 #timer5=13000
 
 #Timers para os fake loads
-timer1 = 0
-timer2 = 0
-timer3 = 0
-timer4 = 0
-timer5 = 0
+timer1 = 4000
+timer2 = 4000
+timer3 = 5500
+timer4 = 12000
+timer5 = 13000
 
 #Lista com o nome de todas as imagens
 banco_de_imagens = ['logo_banco_matuto.png','logo_matuto.png','logo_nome_matuto.png']
