@@ -18,12 +18,6 @@ root.iconbitmap('img/icone_cacto.ico')
 #Definindo a cor inicial da página
 root.config(bg='black')
 
-#timer1=4000
-#timer2=4000
-#timer3=5500
-#timer4=12000
-#timer5=13000
-
 #Timers para os fake loads
 timer1 = 4000
 timer2 = 4000
@@ -198,16 +192,22 @@ def obter_dados_formulário(cpf,senha):
 def menu():
     capturar_nome_usuário = informações_usuário[cpf_usuário]
     capturar_saldo_usuário = saldo_dos_usuários[cpf_usuário]
+
     nome_usuário = Label(root,text=f'Bem vindo, {capturar_nome_usuário}',bg='white',font=('Arial',12))
     posicionar_label(nome_usuário,0.5,0.1)
+
     saldo_usuário = Label(root,text=f'Seu saldo é R$ {capturar_saldo_usuário}',bg='white',font=('Arial',12))
     posicionar_label(saldo_usuário,0.5,0.135)
+
     botão_deposito = Button(root,text='Depósito',width=20,height=3,bg='#38A37F',fg='white',font=('Arial',16),command=lambda:página_deposito(botão_deposito,botão_saque,botão_extrato,botão_encerrar,nome_usuário,saldo_usuário))
     posicionar_label(botão_deposito,0.25,0.3)
+
     botão_saque = Button(text='Saque',width=20,height=3,bg='#38A37F',fg='white',font=('Arial',16),command=lambda:página_saque(botão_deposito,botão_saque,botão_extrato,botão_encerrar,nome_usuário,saldo_usuário))
     posicionar_label(botão_saque,0.75,0.3)
+
     botão_extrato = Button(root,text='Meus dados',width=20,height=3,bg='#38A37F',fg='white',font=('Arial',16),command=lambda:página_meusdados(botão_deposito,botão_saque,botão_extrato,botão_encerrar,nome_usuário,saldo_usuário))
     posicionar_label(botão_extrato,0.25,0.7)
+
     botão_encerrar = Button(root,text='Encerrar operação',width=20,height=3,bg='red',fg='white',font=('Arial',16),command=lambda:encerrar_operação(botão_deposito,botão_saque,botão_extrato,botão_encerrar,nome_usuário,saldo_usuário))
     posicionar_label(botão_encerrar,0.75,0.7)
 
@@ -216,10 +216,13 @@ def página_deposito(b1,b2,b3,b4,b5,b6):
     deletar_itens_menu(b1,b2,b3,b4,b5,b6)
     entrada_valor_depósito = Entry(root,width=20,font=('Arial',20),borderwidth=5)
     entrada_valor_depósito.place(height=60,relx=0.5,rely=0.45,anchor=CENTER)
+
     mensagem_depósito_valor = Label(root,text='Qual valor deseja depositar?',font=('Arial',12),bg='white')
     posicionar_label(mensagem_depósito_valor,0.5,0.36)
+
     botão_confirmar_depósito = Button(root,text='Confirmar',width=20,height=3,bg='#38A37F',fg='white',command=lambda:verificar_valor_deposito(entrada_valor_depósito.get(),entrada_valor_depósito))
     posicionar_label(botão_confirmar_depósito,0.35,0.6)
+
     botão_retornar_depósito = Button(root,text='Retornar',width=20,height=3,bg='red',fg='white',command=lambda:root.after(1500,retornar_ao_menu_deposito(entrada_valor_depósito,mensagem_depósito_valor,botão_confirmar_depósito,botão_retornar_depósito)))
     posicionar_label(botão_retornar_depósito,0.65,0.6)
     
@@ -228,10 +231,13 @@ def página_saque(b1,b2,b3,b4,b5,b6):
     deletar_itens_menu(b1,b2,b3,b4,b5,b6)
     entrada_valor_saque = Entry(root,width=20,font=('Arial',20),borderwidth=5)
     entrada_valor_saque.place(height=60,relx=0.5,rely=0.45,anchor=CENTER)
+
     mensagem_saque_valor = Label(root,text='Qual valor deseja sacar?',font=('Arial',12),bg='white')
     posicionar_label(mensagem_saque_valor,0.5,0.36)
+
     botão_confirmar_saque = Button(root,text='Confirmar',width=20,height=3,bg='#38A37F',fg='white',command=lambda:verificar_valor_saque(entrada_valor_saque.get(),entrada_valor_saque))
     posicionar_label(botão_confirmar_saque,0.35,0.6)
+
     botão_retornar_saque = Button(root,text='Retornar',width=20,height=3,bg='red',fg='white',command=lambda:root.after(1500,retornar_ao_menu_deposito(entrada_valor_saque,mensagem_saque_valor,botão_confirmar_saque,botão_retornar_saque)))
     posicionar_label(botão_retornar_saque,0.65,0.6)
 
@@ -270,6 +276,7 @@ def retornar_ao_menu_meusdados(l1,l2,l3,l4):
 #Função para o botão encerrar operação
 def encerrar_operação(b1,b2,b3,b4,b5,b6):
     deletar_itens_menu(b1,b2,b3,b4,b5,b6)
+    
     mensagem_encerramento = Label(text='Até mais :)',font=('Arial',24),fg='red',bg='white')
     posicionar_label(mensagem_encerramento,0.5,0.45)
     root.after(2000,lambda: root.quit())
