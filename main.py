@@ -256,7 +256,7 @@ def página_meusdados(b1, b2, b3, b4, b5, b6):
     posicionar_label(saldo_usuário_label, 0.5, 0.3)
 
     # Cria o botão para retornar ao menu
-    botão_voltar = Button(root, text='Voltar', width=20, height=3, bg='#38A37F', fg='white', font=('Arial', 16), command=lambda:root.after(timer1,retornar_ao_menu_meusdados(nome_usuário_label,cpf_label,saldo_usuário_label,botão_voltar)))
+    botão_voltar = Button(root, text='Voltar', width=20, height=3, bg='#38A37F', fg='white', font=('Arial', 16), command=lambda:retornar_ao_menu_meusdados(nome_usuário_label,cpf_label,saldo_usuário_label,botão_voltar))
     posicionar_label(botão_voltar, 0.5, 0.6)
 
 # Função para retornar ao menu
