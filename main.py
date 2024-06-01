@@ -1,6 +1,5 @@
 from tkinter import *
 from PIL import Image,ImageTk
-from tkinter import messagebox
 import os
 
 #Definindo a janela
@@ -37,7 +36,7 @@ banco_de_imagens = ['logo_banco_matuto.png','logo_matuto.png','logo_nome_matuto.
 
 #Define informações dos usuarios 
 dados_usuário = {'1000':'123','2000':'321'}
-informações_usuário = {'1000':'Elias Anthony Bento Pereira','2000':'Carolina Hadassa Nogueira'}
+informações_usuário = {'1000':'Silvio Santos da Cunha','2000':'Rodrigo Faro da Silva'}
 saldo_dos_usuários = {'1000':0,'2000':0}
 
 #Dicionario com os imagens carregadas
@@ -107,6 +106,26 @@ def verificar_valor_deposito(valor,caixa_deposito):
         mensagem_error_deposito = Label(text='Valor inserido inválido',fg='red',bg='white',font=('Arial',12))
         posicionar_label(mensagem_error_deposito,0.5,0.3)
         root.after(1500,lambda:deletar_label(mensagem_error_deposito))
+        
+#Função para verificar os valores colocados na caixa de saque 
+def verificar_valor_saque(valor,caixa_deposito):
+    try:
+        valor = int(valor)
+        if valor > saldo_dos_usuários[cpf_usuário] or valor == 0:
+            mensagem_error_saque = Label(text='Saldo insuficiente',fg='red',bg='white',font=('Arial',12))
+            posicionar_label(mensagem_error_saque,0.5,0.3)
+            root.after(1500,lambda:deletar_label(mensagem_error_saque))
+        else:
+            saldo_dos_usuários[cpf_usuário]-=valor
+            mensagem_valido_saque = Label(text='Saque concluido',fg='green',bg='white',font=('Arial',12))
+            posicionar_label(mensagem_valido_saque,0.5,0.3)
+            root.after(1500,lambda:deletar_label(mensagem_valido_saque))
+            caixa_deposito.delete(0,END)
+    except:
+        mensagem_error_saque = Label(text='Valor inserido inválido',fg='red',bg='white',font=('Arial',12))
+        posicionar_label(mensagem_error_saque,0.5,0.3)
+        root.after(1500,lambda:deletar_label(mensagem_error_saque))
+
         
 #Função para inicialização
 def boot():
@@ -182,7 +201,7 @@ def menu():
     nome_usuário = Label(root,text=f'Bem vindo, {capturar_nome_usuário}',bg='white',font=('Arial',12))
     posicionar_label(nome_usuário,0.5,0.1)
     saldo_usuário = Label(root,text=f'Seu saldo é R$ {capturar_saldo_usuário}',bg='white',font=('Arial',12))
-    posicionar_label(saldo_usuário,0.5,0.13)
+    posicionar_label(saldo_usuário,0.5,0.135)
     botão_deposito = Button(root,text='Depósito',width=20,height=3,bg='#38A37F',fg='white',font=('Arial',16),command=lambda:página_deposito(botão_deposito,botão_saque,botão_extrato,botão_encerrar,nome_usuário,saldo_usuário))
     posicionar_label(botão_deposito,0.25,0.3)
     botão_saque = Button(text='Saque',width=20,height=3,bg='#38A37F',fg='white',font=('Arial',16),command=lambda:página_saque(botão_deposito,botão_saque,botão_extrato,botão_encerrar,nome_usuário,saldo_usuário))
@@ -207,6 +226,14 @@ def página_deposito(b1,b2,b3,b4,b5,b6):
 #Função para o botão saque
 def página_saque(b1,b2,b3,b4,b5,b6):
     deletar_itens_menu(b1,b2,b3,b4,b5,b6)
+    entrada_valor_saque = Entry(root,width=20,font=('Arial',20),borderwidth=5)
+    entrada_valor_saque.place(height=60,relx=0.5,rely=0.45,anchor=CENTER)
+    mensagem_saque_valor = Label(root,text='Qual valor deseja sacar?',font=('Arial',12),bg='white')
+    posicionar_label(mensagem_saque_valor,0.5,0.36)
+    botão_confirmar_saque = Button(root,text='Confirmar',width=20,height=3,bg='#38A37F',fg='white',command=lambda:verificar_valor_saque(entrada_valor_saque.get(),entrada_valor_saque))
+    posicionar_label(botão_confirmar_saque,0.35,0.6)
+    botão_retornar_saque = Button(root,text='Retornar',width=20,height=3,bg='red',fg='white',command=lambda:root.after(1500,retornar_ao_menu_deposito(entrada_valor_saque,mensagem_saque_valor,botão_confirmar_saque,botão_retornar_saque)))
+    posicionar_label(botão_retornar_saque,0.65,0.6)
 
 #Função para o botão extrato
 def página_meusdados(b1,b2,b3,b4,b5,b6):
